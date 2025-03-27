@@ -1,5 +1,5 @@
-# Use an official OpenJDK runtime as a parent image
-FROM maven:3.9.5-eclipse-temurin-17 AS build
+# Use an official OpenJDK 21 with Maven for building
+FROM maven:3.9.5-eclipse-temurin-21 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -8,14 +8,14 @@ WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
 
-# Copy the source code
+# Copy the entire source code
 COPY src ./src
 
-# Build the application
+# Build the application using Java 21
 RUN mvn clean package -DskipTests
 
-# Use a smaller JDK image for runtime
-FROM openjdk:17-jdk-slim
+# Use a minimal JDK 21 image for running the app
+FROM eclipse-temurin:21-jdk
 
 # Set the working directory inside the container
 WORKDIR /app
