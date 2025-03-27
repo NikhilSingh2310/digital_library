@@ -1,78 +1,81 @@
 # Digital Library
 
-## Overview
-Digital Library is a Spring Boot-based application that provides a platform to manage and access digital books efficiently. The application is designed with role-based authentication and supports PostgreSQL as the database.
+This is a Spring Boot-based Digital Library application that provides a backend for managing books.
 
 ## Features
-- User registration and authentication (Admin & Customer)
-- Role-based access control
-- Book management (Admin)
-- Book browsing and borrowing (Customer)
-- PostgreSQL database integration
-- Docker support for deployment
+- Manage books (add, update, delete, list)
+- Search books by title
 
-## Technologies Used
-- **Backend:** Java, Spring Boot, Spring MVC, Spring Data JPA
+## Tech Stack
+- **Backend:** Spring Boot, Spring Data JPA
 - **Database:** PostgreSQL
 - **Build Tool:** Maven
-- **Deployment:** Render (with Docker)
+- **Deployment:** Docker, Render
 
-## Installation and Setup
-
+## Installation & Setup
 ### Prerequisites
-- Java 21
+- Java 17+
 - Maven
 - PostgreSQL
-- Docker (for deployment)
+- Docker (optional, for containerized deployment)
 
-### Clone the Repository
-```sh
-git clone https://github.com/NikhilSingh2310/digital_library.git
-cd digital_library
+### Configuration
+Set up the required environment variables:
+```
+SPRING_DATASOURCE_URL=jdbc:postgresql://<your-db-host>/<your-db-name>
+SPRING_DATASOURCE_USERNAME=<your-db-username>
+SPRING_DATASOURCE_PASSWORD=<your-db-password>
+SPRING_JPA_HIBERNATE_DDL_AUTO=update
 ```
 
-### Configure Database
-Update `application.properties` with your PostgreSQL credentials:
-```properties
-spring.datasource.url=jdbc:postgresql://<YOUR_RENDER_DB_URL>:5432/<YOUR_DATABASE_NAME>
-spring.datasource.username=<YOUR_DB_USERNAME>
-spring.datasource.password=<YOUR_DB_PASSWORD>
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
-server.port=${PORT:8080}
-```
+### Run Locally
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/NikhilSingh2310/digital_library.git
+   cd digital_library
+   ```
+2. Build the project:
+   ```sh
+   mvn clean package -DskipTests
+   ```
+3. Run the application:
+   ```sh
+   java -jar target/digitallibrary-0.0.1-SNAPSHOT.jar
+   ```
 
-### Build and Run the Application
-```sh
-mvn clean package
-java -jar target/digitallibrary-0.0.1-SNAPSHOT.jar
-```
-
-## Deployment (Render)
-### Using Docker
-1. **Ensure Docker is installed.**
-2. **Create `Dockerfile` in the project root** (already provided).
-3. **Build and run the Docker container:**
+### Run with Docker
+1. Build and run the Docker container:
    ```sh
    docker build -t digital-library .
-   docker run -p 8080:8080 digital-library
+   docker run -p 8080:8080 --env-file .env digital-library
    ```
-4. **Deploy to Render** following the Render setup guide.
 
 ## API Endpoints
-| Method | Endpoint                   | Description               |
-|--------|----------------------------|---------------------------|
-| POST   | `/api/users/signup`        | User registration         |
-| POST   | `/api/users/login`         | User authentication       |
-| POST   | `/api/users/profile/complete` | Complete user profile |
-| GET    | `/api/books`               | View all books           |
-| POST   | `/api/books/add` (Admin)   | Add a new book           |
+| Method | Endpoint            | Description               |
+|--------|---------------------|---------------------------|
+| POST   | /api/books          | Add a new book           |
+| GET    | /api/books          | Get all books            |
+| GET    | /api/books/{id}     | Get book by ID           |
+| GET    | /api/books/search   | Search book by title     |
+| PUT    | /api/books/{id}     | Update book details      |
+| DELETE | /api/books/{id}     | Delete a book            |
+| POST   | /api/books/exit     | Shutdown application     |
 
-## Notes
-- No testing framework has been implemented.
-- Ensure to use the correct **database credentials** for deployment.
-- Keep the `.env` file secure if used for environment variables.
+## Deployment on Render
+1. Push the repository to GitHub.
+2. Connect Render with the repository.
+3. Set environment variables in Render.
+4. Deploy and monitor logs for any errors.
+
+## Future Scope & Improvements
+- Implement role-based authentication and authorization.
+- Improve error handling and validation.
+- Add unit and integration tests.
+- Implement caching for faster responses.
+- Enhance logging and monitoring.
+- Introduce API documentation using Swagger.
+- Implement pagination for large data sets.
 
 ## Author
-**Nikhil Singh**
+Nikhil Singh
 
